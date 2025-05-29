@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: url('waldemar-zHY3gs9-j_A-unsplash.jpg') center center fixed; 
+            background-size: cover; 
+            position: relative;
+            margin: 0;
+            padding-top: 50px;
+            color: white; 
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); 
+            z-index: -1; 
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 16px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #show {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            max-width: 300px;
+            margin: 20px auto;
+            text-align: center;
+            line-height: 1.5;
+            font-size: 16px;
+            display: none;
+            
+        }
+
+        #show h2 {
+            color: #007bff;
+            margin-top: 0;
+        }
+
+        #show p {
+            margin-bottom: 10px;
+        }
+        #show p:last-child {
+            margin-bottom: 0;
+        }
+        #show p {
+            color: #333;
+        }
+        #show p.error {
+            color: red;
+        }
+        #city {
+            width: 200px;
+            max-width: 100%;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding-top: 20px;
+            }
+            #show {
+                width: 90%;
+            }
+            input[type="text"] {
+                width: 70%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather App</h1>
+    <input type="text" id="city" placeholder="Enter city name" />
+    <button onclick="getWeather()">Get Weather</button>
+    <div id="show"></div>
+
+    <script>
+        const apiKey = '4cfa0fbdf1686c23011b96868438f077';
+
+        navigator.geolocation.getCurrentPosition((info) => {
+            let lat = info.coords.latitude;
+            let lon = info.coords.longitude;
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+            console.log(lat, lon);
+            console.log(url);
+        }, (error) => {
+            console.error("Error getting location:", error);
+            alert("Could not get your current location. Please enter a city name.");
+        });
+
+
+        document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter')
+            getWeather();
+    })
+        const getWeather = () => {
+            const city = document.getElementById('city').value;
+            console.log(city);
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+
+            fetch(url)
+            .then(response =>response.json())
+            .then((result => {
+                console.log(result);
+                show.innerHTML = `
+                    <h2> ${result.name}</h2>
+                    <p>Temperature: ${(result.main.temp - 273.15).toFixed(2)} °C</p>
+                    <p>Weather: ${result.weather[0].description}</p>
+                    <p>Humidity: ${result.main.humidity}%</p>
+                    <p>Wind Speed: ${result.wind.speed} m/s</p>
+                    <p>Visibility: ${result.visibility / 1000} km</p>
+                    <p>Pressure: ${result.main.pressure} hPa</p>
+                    <p>Cloudiness: ${result.clouds.all}%</p>
+                    <p>Sunrise: ${new Date(result.sys.sunrise * 1000).toLocaleTimeString()}</p>
+                    <p>Sunset: ${new Date(result.sys.sunset * 1000).toLocaleTimeString()}</p>
+                `;
+                show.style.display = 'block';
+            }))
+            .catch((err=>{
+                console.log(err);
+                show.innerHTML  = `<p class="error">Error fetching weather data for ${city}. Please try again or enter a valid city name.</p>`;
+                show.style.display = 'block';
+            }))
+            if (city === "") {
+                alert('Please enter a city name');
+                return;
+            }
+        }
+    </script>
+</body>
+</html>

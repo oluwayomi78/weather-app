@@ -147,15 +147,15 @@
                 console.log(result);
                 show.innerHTML = `
                     <h2> ${result.name}</h2>
-                    <p>Temperature: ${(result.main.temp - 273.15).toFixed(2)} °C</p>
-                    <p>Weather: ${result.weather[0].description}</p>
-                    <p>Humidity: ${result.main.humidity}%</p>
-                    <p>Wind Speed: ${result.wind.speed} m/s</p>
-                    <p>Visibility: ${result.visibility / 1000} km</p>
-                    <p>Pressure: ${result.main.pressure} hPa</p>
-                    <p>Cloudiness: ${result.clouds.all}%</p>
-                    <p>Sunrise: ${new Date(result.sys.sunrise * 1000).toLocaleTimeString()}</p>
-                    <p>Sunset: ${new Date(result.sys.sunset * 1000).toLocaleTimeString()}</p>
+                    <p>🌡️ Temperature: ${(result.main.temp - 273.15).toFixed(2)} °C</p>
+                    <p>🌥️ Weather: ${result.weather[0].description}</p>
+                    <p>💧 Humidity: ${result.main.humidity}%</p>
+                    <p>🌬️ Wind Speed: ${result.wind.speed} m/s</p>
+                    <p>👁️ Visibility: ${result.visibility / 1000} km</p>
+                    <p>🧭 Pressure: ${result.main.pressure} hPa</p>
+                    <p>☁️ Cloudiness: ${result.clouds.all}%</p>
+                    <p>🌅 Sunrise: ${new Date(result.sys.sunrise * 1000).toLocaleTimeString()}</p>
+                    <p>🌇 Sunset: ${new Date(result.sys.sunset * 1000).toLocaleTimeString()}</p>
                 `;
                 show.style.display = 'block';
             }))
